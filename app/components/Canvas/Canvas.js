@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Fade, Button } from 'reactstrap'
 import CanvasDraw from "react-canvas-draw"
+import axios from 'axios'
 
 import { saveDivAsImg } from './canvas_utils'
 
@@ -22,6 +23,17 @@ class Canvas extends Component {
     classify(div) {
         saveDivAsImg(div).then(image => {
             console.log(image)
+
+            let image_array = image.split('base64,')
+
+            fetch(`http://localhost:5000/classify/${image_array[1].replace(/\//g, '&')}`, {
+                method: 'POST',
+                body: {},
+            }).then((response) => {                
+                response.json().then((body) => {
+                    console.log(body)                    
+                })
+            })
         }).catch(error => console.log(error))
     }
 
