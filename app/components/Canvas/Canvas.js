@@ -16,14 +16,25 @@ class Canvas extends Component {
             width: 400,
             height: 400,
             brushRadius: 10,
-            lazyRadius: 12
+            lazyRadius: 12,
+            title: 'Draw something!',
+            phrases: [
+                "I think it's a ",
+                "Mmmm, perhaps you draw a ",
+                "My best guess is a ",
+                "It's got to be a ",
+                "Am I confused, or is this a ",
+                "Gotcha! It's a ",
+                "Monkey working behind says it's a ",
+                "... maybe a ",
+                "Wow! Nice ",
+                "Yikes! That's an uggly  "
+            ]
         }
     }
 
     classify(div) {
         saveDivAsImg(div).then(image => {
-            console.log(image)
-
             let image_array = image.split('base64,')
 
             fetch(`http://localhost:5000/classify/${image_array[1].replace(/\//g, '&')}`, {
@@ -31,7 +42,8 @@ class Canvas extends Component {
                 body: {},
             }).then((response) => {                
                 response.json().then((body) => {
-                    console.log(body)                    
+                    console.log(body)   
+                    this.setState({ title: `${this.state.phrases[Math.floor(Math.random() * 10)]}${body}` })                 
                 })
             })
         }).catch(error => console.log(error))
@@ -41,6 +53,7 @@ class Canvas extends Component {
         return(
             <Fade in={true} timeout={600}>
                 <div className='wrapper-canvas'>
+                    <p className='title-lbl'>{this.state.title}</p>
                     <div className='layout-canvas'>
                         <div id='canvas'>
                             <CanvasDraw

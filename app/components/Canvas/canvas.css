@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+
 .layout-canvas {
     border: solid 5px grey;
     cursor: crosshair;
@@ -24,4 +26,11 @@
 .btn-layout {
     margin: 10px;
     width: 100%;
+    font-family: 'Roboto', sans-serif;
+    text-transform: uppercase;
+}
+
+.title-lbl {
+    font-size: 2em;
+    font-family: 'Roboto', sans-serif;
 }
