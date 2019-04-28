@@ -16,8 +16,9 @@ class Canvas extends Component {
             width: 400,
             height: 400,
             brushRadius: 10,
-            lazyRadius: 12,
+            lazyRadius: 10,
             title: 'Draw something!',
+            confidence: '',
             phrases: [
                 "I think it's a ",
                 "Mmmm, perhaps you draw a ",
@@ -43,7 +44,10 @@ class Canvas extends Component {
             }).then((response) => {                
                 response.json().then((body) => {
                     console.log(body)   
-                    this.setState({ title: `${this.state.phrases[Math.floor(Math.random() * 10)]}${body}` })                 
+                    this.setState({
+                        title: `${this.state.phrases[Math.floor(Math.random() * 10)]}${body.prediction}`,
+                        confidence: `I'm ${body[body.prediction].toFixed(2)}% sure of it!`
+                    })                 
                 })
             })
         }).catch(error => console.log(error))
@@ -54,6 +58,7 @@ class Canvas extends Component {
             <Fade in={true} timeout={600}>
                 <div className='wrapper-canvas'>
                     <p className='title-lbl'>{this.state.title}</p>
+                    <p className='confidence-lbl'>{this.state.confidence}</p>
                     <div className='layout-canvas'>
                         <div id='canvas'>
                             <CanvasDraw

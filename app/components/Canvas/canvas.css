@@ -33,4 +33,10 @@
 .title-lbl {
     font-size: 2em;
     font-family: 'Roboto', sans-serif;
+    margin-bottom: 0;
+}
+
+.confidence-lbl {
+    font-size: 0.8em;
+    font-family: 'Roboto', sans-serif;
 }
