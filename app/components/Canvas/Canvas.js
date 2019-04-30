@@ -19,6 +19,7 @@ class Canvas extends Component {
             lazyRadius: 10,
             title: 'Draw something!',
             confidence: '',
+            otherGuesses: '',
             phrases: [
                 "I think it's a ",
                 "Mmmm, perhaps you draw a ",
@@ -44,9 +45,33 @@ class Canvas extends Component {
             }).then((response) => {                
                 response.json().then((body) => {
                     console.log(body)   
+                    const prediction = body.prediction
+                    body.prediction = 0.0
+
+                    let classes = []
+
+                    for (var classification in body) {
+                        classes.push([classification, body[classification]])
+                    }
+
+                    classes = classes.filter(c => c[1] != 0)
+                    
+                    classes = classes.sort((a, b) => {
+                        if (a[1] < b[1]) return -1
+                        if (a[1] > b[1]) return 1
+                        return 0
+                    })
+
+                    console.log(classes)
+
+                    let first = classes.pop()
+                    let second = classes.pop()
+                    let third = classes.pop() 
+                    
                     this.setState({
-                        title: `${this.state.phrases[Math.floor(Math.random() * 10)]}${body.prediction}`,
-                        confidence: `I'm ${body[body.prediction].toFixed(2)}% sure of it!`
+                        title: `${this.state.phrases[Math.floor(Math.random() * 10)]}${prediction}`,
+                        confidence: `I'm ${body[prediction].toFixed(2)}% sure of it!`,
+                        otherGuesses: `Second best guess: ${second[0]} (${second[1].toFixed(2)}%), Third best guess: ${third[0]} (${third[1].toFixed(2)}%)`
                     })                 
                 })
             })
@@ -59,6 +84,7 @@ class Canvas extends Component {
                 <div className='wrapper-canvas'>
                     <p className='title-lbl'>{this.state.title}</p>
                     <p className='confidence-lbl'>{this.state.confidence}</p>
+                    <p className='confidence-lbl'>{this.state.otherGuesses}</p>
                     <div className='layout-canvas'>
                         <div id='canvas'>
                             <CanvasDraw
